@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Activity Tracker</title>
+  <style>
+    body {
+      width: 100%;
+      margin: 0;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e9ecef;
+    }
+    
+    .header h1 {
+      margin: 0;
+      color: #495057;
+      font-size: 18px;
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .stat-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .stat-label {
+      font-weight: 500;
+      color: #6c757d;
+    }
+    
+    .stat-value {
+      font-weight: 600;
+      color: #495057;
+    }
+    
+    .badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .badge-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+    
+    .badge-success {
+      background-color: #28a745;
+      color: white;
+    }
+    
+    .recent-activity {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .activity-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #e9ecef;
+      font-size: 12px;
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-url {
+      color: #007bff;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    
+    .activity-time {
+      color: #6c757d;
+      font-size: 11px;
+    }
+    
+    .device-name {
+      background: #e9ecef;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    
+    .refresh-btn {
+      width: 100%;
+      padding: 8px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    
+    .refresh-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Activity Tracker</h1>
+  </div>
+  
+  <div class="device-name" id="deviceName">Loading...</div>
+  
+  <button class="refresh-btn" id="refreshBtn">Refresh Data</button>
+  
+  <div class="stats-card">
+    <h3>Today's Stats</h3>
+    <div class="stat-item">
+      <span class="stat-label">Sites Visited:</span>
+      <span class="stat-value" id="totalSites">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Game Sites:</span>
+      <span class="stat-value" id="gameSites">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Regular Sites:</span>
+      <span class="stat-value" id="regularSites">0</span>
+    </div>
+  </div>
+  
+  <div class="stats-card">
+    <h3>Recent Activity</h3>
+    <div class="recent-activity" id="recentActivity">
+      <div style="text-align: center; color: #6c757d; padding: 20px;">
+        No activity yet...
+      </div>
+    </div>
+  </div>
+  
+  <script src="sidepanel.js"></script>
+</body>
+</html> 

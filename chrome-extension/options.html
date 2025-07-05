@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Set Device Name</title>
+</head>
+<body>
+  <h1>Device Settings</h1>
+  <div id="ipInfo" style="margin-bottom: 20px; padding: 10px; background: #e9ecef; border-radius: 4px;">
+    <strong>Your IP Address:</strong> <span id="ipAddress">Loading...</span>
+  </div>
+  <form id="deviceForm">
+    <label for="deviceName">Custom Device Name (Optional):</label>
+    <input type="text" id="deviceName" name="deviceName" placeholder="Leave empty to use IP address" />
+    <button type="submit">Save</button>
+  </form>
+  <p style="margin-top: 16px; font-size: 14px; color: #666;">
+    If no custom name is set, your IP address will be used to identify your device.
+  </p>
+  <script src="options.js"></script>
+</body>
+</html> 

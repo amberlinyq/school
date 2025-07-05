@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Classroom Activity Tracker",
+  "version": "1.0",
+  "description": "Tracks student browsing activity and reports to teacher dashboard.",
+  "permissions": [
+    "tabs",
+    "history",
+    "storage",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Classroom Activity Tracker"
+  }
+} 
