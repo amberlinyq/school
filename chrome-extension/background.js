@@ -13,7 +13,7 @@ function reportActivity(data) {
   // For testing, log to console and send to local server
   console.log('Activity tracked:', data);
   
-  fetch('https://your-backend-url.vercel.app/api/activity', {
+  fetch('https://backend-khaki-phi-30.vercel.app/api/activity', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
