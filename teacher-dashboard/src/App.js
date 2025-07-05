@@ -24,8 +24,8 @@ function App() {
   const fetchData = async () => {
     try {
       const [historyRes, studentsRes] = await Promise.all([
-        axios.get('/api/history'),
-        axios.get('/api/students')
+        axios.get('https://backend-khaki-phi-30.vercel.app/api/history'),
+        axios.get('https://backend-khaki-phi-30.vercel.app/api/students')
       ]);
       
       setBrowsingData(historyRes.data.browsingData || []);
