@@ -25,35 +25,37 @@ function reportActivity(data) {
   });
 }
 
-// Get IP address or device name from storage
-function getDeviceIdentifier(callback) {
-  chrome.storage.local.get(['deviceName', 'ipAddress'], (result) => {
-    if (result.ipAddress) {
-      callback(result.ipAddress);
-    } else if (result.deviceName) {
-      callback(result.deviceName);
+// Get student information from storage
+function getStudentInfo(callback) {
+  chrome.storage.local.get(['studentId', 'studentName', 'className', 'chromebookNumber'], (result) => {
+    if (result.studentId) {
+      callback({
+        studentId: result.studentId,
+        studentName: result.studentName,
+        className: result.className,
+        chromebookNumber: result.chromebookNumber
+      });
     } else {
-      // Try to get IP address from a public API
-      fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-          chrome.storage.local.set({ ipAddress: data.ip });
-          callback(data.ip);
-        })
-        .catch(() => {
-          callback('Unknown Device');
-        });
+      callback({
+        studentId: 'Unknown Student',
+        studentName: 'Not Set',
+        className: 'Not Set',
+        chromebookNumber: 'Not Set'
+      });
     }
   });
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
-    getDeviceIdentifier((deviceIdentifier) => {
+    getStudentInfo((studentInfo) => {
       const activity = {
         url: tab.url,
         timestamp: Date.now(),
-        deviceName: deviceIdentifier,
+        studentId: studentInfo.studentId,
+        studentName: studentInfo.studentName,
+        className: studentInfo.className,
+        chromebookNumber: studentInfo.chromebookNumber,
         isGameSite: isGameSite(tab.url)
       };
       reportActivity(activity);

@@ -1,40 +1,102 @@
 // Side panel functionality
-let currentDeviceIdentifier = 'Unknown Device';
+let currentStudentInfo = {
+  studentId: 'Unknown Student',
+  studentName: 'Not Set',
+  className: 'Not Set',
+  chromebookNumber: 'Not Set'
+};
 let activityData = [];
 
-// Load device identifier and initial data
+// Load student information and initial data
 document.addEventListener('DOMContentLoaded', () => {
-  loadDeviceIdentifier();
+  loadStudentInfo();
   loadActivityData();
   
   // Set up refresh button
   document.getElementById('refreshBtn').addEventListener('click', loadActivityData);
+  
+  // Set up student info form
+  setupStudentForm();
 });
 
-// Load device identifier (IP address or device name) from storage
-function loadDeviceIdentifier() {
-  chrome.storage.local.get(['deviceName', 'ipAddress'], (result) => {
-    if (result.ipAddress) {
-      currentDeviceIdentifier = result.ipAddress;
-      document.getElementById('deviceName').textContent = `IP: ${result.ipAddress}`;
-    } else if (result.deviceName) {
-      currentDeviceIdentifier = result.deviceName;
-      document.getElementById('deviceName').textContent = `Device: ${result.deviceName}`;
+// Load student information from storage
+function loadStudentInfo() {
+  chrome.storage.local.get(['studentId', 'studentName', 'className', 'chromebookNumber'], (result) => {
+    if (result.studentId) {
+      currentStudentInfo = {
+        studentId: result.studentId,
+        studentName: result.studentName,
+        className: result.className,
+        chromebookNumber: result.chromebookNumber
+      };
+      document.getElementById('deviceName').textContent = `${result.studentName} - ${result.className} - CB${result.chromebookNumber}`;
+      document.getElementById('studentForm').style.display = 'none';
     } else {
-      // Try to fetch IP address directly
-      fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-          currentDeviceIdentifier = data.ip;
-          document.getElementById('deviceName').textContent = `IP: ${data.ip}`;
-          chrome.storage.local.set({ ipAddress: data.ip });
-        })
-        .catch(() => {
-          currentDeviceIdentifier = 'Unknown Device';
-          document.getElementById('deviceName').textContent = 'Unknown Device';
-        });
+      document.getElementById('deviceName').textContent = 'Please set your information below';
+      document.getElementById('studentForm').style.display = 'block';
     }
   });
+}
+
+// Setup student form
+function setupStudentForm() {
+  const form = document.getElementById('infoForm');
+  const statusDiv = document.getElementById('formStatus');
+  
+  // Load existing data into form
+  chrome.storage.local.get(['studentName', 'className', 'chromebookNumber'], (result) => {
+    if (result.studentName) {
+      document.getElementById('studentName').value = result.studentName;
+    }
+    if (result.className) {
+      document.getElementById('className').value = result.className;
+    }
+    if (result.chromebookNumber) {
+      document.getElementById('chromebookNumber').value = result.chromebookNumber;
+    }
+  });
+  
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const studentName = document.getElementById('studentName').value.trim();
+    const className = document.getElementById('className').value.trim();
+    const chromebookNumber = document.getElementById('chromebookNumber').value.trim();
+    
+    if (!studentName || !className || !chromebookNumber) {
+      showFormStatus('Please fill in all fields.', 'error');
+      return;
+    }
+    
+    // Create a unique identifier
+    const studentId = `${studentName} - ${className} - CB${chromebookNumber}`;
+    
+    chrome.storage.local.set({ 
+      studentName,
+      className, 
+      chromebookNumber,
+      studentId
+    }, () => {
+      showFormStatus('Information saved successfully!', 'success');
+      
+      // Update the display
+      setTimeout(() => {
+        loadStudentInfo();
+        document.getElementById('studentForm').style.display = 'none';
+      }, 1500);
+    });
+  });
+}
+
+function showFormStatus(message, type) {
+  const statusDiv = document.getElementById('formStatus');
+  statusDiv.textContent = message;
+  statusDiv.className = `status ${type}`;
+  statusDiv.style.display = 'block';
+  
+  setTimeout(() => {
+    statusDiv.style.display = 'none';
+  }, 3000);
 }
 
 // Load activity data from backend
@@ -43,8 +105,8 @@ async function loadActivityData() {
     const response = await fetch('https://backend-khaki-phi-30.vercel.app/api/history');
     const data = await response.json();
     
-    // Filter data for current device
-    activityData = data.browsingData.filter(item => item.deviceName === currentDeviceIdentifier);
+    // Filter data for current student
+    activityData = data.browsingData.filter(item => item.studentId === currentStudentInfo.studentId);
     
     updateStats();
     updateRecentActivity();

@@ -1,21 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Set Device Name</title>
+  <title>Student Information</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+    
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+    
+    .btn {
+      background: #007bff;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    
+    .btn:hover {
+      background: #0056b3;
+    }
+    
+    .info {
+      background: #e9ecef;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .status {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
 </head>
 <body>
-  <h1>Device Settings</h1>
-  <div id="ipInfo" style="margin-bottom: 20px; padding: 10px; background: #e9ecef; border-radius: 4px;">
-    <strong>Your IP Address:</strong> <span id="ipAddress">Loading...</span>
+  <div class="container">
+    <h1>Student Information</h1>
+    
+    <div class="info">
+      <strong>Please fill in your information:</strong><br>
+      This helps your teacher identify you when tracking browsing activity.
+    </div>
+    
+    <form id="studentForm">
+      <div class="form-group">
+        <label for="studentName">Full Name:</label>
+        <input type="text" id="studentName" name="studentName" placeholder="Enter your full name" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="className">Class:</label>
+        <input type="text" id="className" name="className" placeholder="e.g., Math 101, English 9A" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="chromebookNumber">Chromebook Number:</label>
+        <input type="text" id="chromebookNumber" name="chromebookNumber" placeholder="e.g., CB-001, 15, A1" required />
+      </div>
+      
+      <button type="submit" class="btn">Save Information</button>
+    </form>
+    
+    <div id="status" class="status" style="display: none;"></div>
   </div>
-  <form id="deviceForm">
-    <label for="deviceName">Custom Device Name (Optional):</label>
-    <input type="text" id="deviceName" name="deviceName" placeholder="Leave empty to use IP address" />
-    <button type="submit">Save</button>
-  </form>
-  <p style="margin-top: 16px; font-size: 14px; color: #666;">
-    If no custom name is set, your IP address will be used to identify your device.
-  </p>
+  
   <script src="options.js"></script>
 </body>
 </html> 

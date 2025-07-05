@@ -1,36 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const deviceInput = document.getElementById('deviceName');
-  const form = document.getElementById('deviceForm');
-  const ipAddressSpan = document.getElementById('ipAddress');
+  const studentNameInput = document.getElementById('studentName');
+  const classNameInput = document.getElementById('className');
+  const chromebookNumberInput = document.getElementById('chromebookNumber');
+  const form = document.getElementById('studentForm');
+  const statusDiv = document.getElementById('status');
 
-  // Load IP address
-  fetch('https://api.ipify.org?format=json')
-    .then(response => response.json())
-    .then(data => {
-      ipAddressSpan.textContent = data.ip;
-      chrome.storage.local.set({ ipAddress: data.ip });
-    })
-    .catch(() => {
-      ipAddressSpan.textContent = 'Could not load IP';
-    });
-
-  // Load saved device name
-  chrome.storage.local.get(['deviceName'], (result) => {
-    if (result.deviceName) {
-      deviceInput.value = result.deviceName;
+  // Load saved student information
+  chrome.storage.local.get(['studentName', 'className', 'chromebookNumber'], (result) => {
+    if (result.studentName) {
+      studentNameInput.value = result.studentName;
+    }
+    if (result.className) {
+      classNameInput.value = result.className;
+    }
+    if (result.chromebookNumber) {
+      chromebookNumberInput.value = result.chromebookNumber;
     }
   });
 
-  // Save device name
+  // Save student information
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const deviceName = deviceInput.value.trim();
-    chrome.storage.local.set({ deviceName }, () => {
-      if (deviceName) {
-        alert('Custom device name saved!');
-      } else {
-        alert('Device name cleared. IP address will be used instead.');
-      }
+    
+    const studentName = studentNameInput.value.trim();
+    const className = classNameInput.value.trim();
+    const chromebookNumber = chromebookNumberInput.value.trim();
+    
+    if (!studentName || !className || !chromebookNumber) {
+      showStatus('Please fill in all fields.', 'error');
+      return;
+    }
+    
+    // Create a unique identifier
+    const studentId = `${studentName} - ${className} - CB${chromebookNumber}`;
+    
+    chrome.storage.local.set({ 
+      studentName,
+      className, 
+      chromebookNumber,
+      studentId
+    }, () => {
+      showStatus('Student information saved successfully!', 'success');
     });
   });
+
+  function showStatus(message, type) {
+    statusDiv.textContent = message;
+    statusDiv.className = `status ${type}`;
+    statusDiv.style.display = 'block';
+    
+    setTimeout(() => {
+      statusDiv.style.display = 'none';
+    }, 3000);
+  }
 }); 

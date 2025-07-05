@@ -97,6 +97,8 @@ function App() {
             <thead>
               <tr>
                 <th>Student</th>
+                <th>Class</th>
+                <th>Chromebook</th>
                 <th>Website</th>
                 <th>Time</th>
               </tr>
@@ -104,7 +106,9 @@ function App() {
             <tbody>
               {gameSiteAlerts.slice(-5).map((alert, index) => (
                 <tr key={index}>
-                  <td>{alert.deviceName}</td>
+                  <td>{alert.studentName || 'Unknown'}</td>
+                  <td>{alert.className || 'Unknown'}</td>
+                  <td>{alert.chromebookNumber || 'Unknown'}</td>
                   <td>{alert.url}</td>
                   <td>{new Date(alert.timestamp).toLocaleString()}</td>
                 </tr>
@@ -148,7 +152,7 @@ function App() {
             </thead>
             <tbody>
               {browsingData
-                .filter(item => item.deviceName === selectedStudent)
+                .filter(item => item.studentId === selectedStudent)
                 .slice(-20)
                 .reverse()
                 .map((item, index) => (
@@ -176,6 +180,8 @@ function App() {
           <thead>
             <tr>
               <th>Student</th>
+              <th>Class</th>
+              <th>Chromebook</th>
               <th>Website</th>
               <th>Time</th>
               <th>Type</th>
@@ -184,7 +190,9 @@ function App() {
           <tbody>
             {browsingData.slice(-10).reverse().map((item, index) => (
               <tr key={index}>
-                <td>{item.deviceName}</td>
+                <td>{item.studentName || 'Unknown'}</td>
+                <td>{item.className || 'Unknown'}</td>
+                <td>{item.chromebookNumber || 'Unknown'}</td>
                 <td>{item.url}</td>
                 <td>{new Date(item.timestamp).toLocaleString()}</td>
                 <td>
