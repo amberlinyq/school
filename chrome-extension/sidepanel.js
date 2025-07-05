@@ -40,7 +40,7 @@ function loadDeviceIdentifier() {
 // Load activity data from backend
 async function loadActivityData() {
   try {
-    const response = await fetch('https://your-backend-url.vercel.app/api/history');
+    const response = await fetch('https://backend-khaki-phi-30.vercel.app/api/history');
     const data = await response.json();
     
     // Filter data for current device
