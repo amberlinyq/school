@@ -43,15 +43,22 @@ app.get('/api/history', (req, res) => {
 });
 
 app.get('/api/students', (req, res) => {
-  // Get unique device names
-  const students = [...new Set(browsingData.map(item => item.deviceName))];
+  // Get unique student IDs
+  const students = [...new Set(browsingData.map(item => item.studentId))];
   res.json(students);
 });
 
-app.get('/api/student/:deviceName', (req, res) => {
-  const { deviceName } = req.params;
-  const studentData = browsingData.filter(item => item.deviceName === deviceName);
+app.get('/api/student/:studentId', (req, res) => {
+  const { studentId } = req.params;
+  const studentData = browsingData.filter(item => item.studentId === studentId);
   res.json(studentData);
+});
+
+// Get students by class
+app.get('/api/class/:className', (req, res) => {
+  const { className } = req.params;
+  const classData = browsingData.filter(item => item.className === className);
+  res.json(classData);
 });
 
 // Health check endpoint
@@ -59,7 +66,7 @@ app.get('/', (req, res) => {
   res.json({ 
     message: 'Classroom Activity Tracker API',
     status: 'running',
-    students: browsingData.length > 0 ? [...new Set(browsingData.map(item => item.deviceName))] : []
+    students: browsingData.length > 0 ? [...new Set(browsingData.map(item => item.studentId))] : []
   });
 });
 
