@@ -2,12 +2,13 @@
   "manifest_version": 3,
   "name": "Classroom Activity Tracker",
   "version": "1.0",
-  "description": "Tracks student browsing activity and reports to teacher dashboard.",
+  "description": "Stay focused on your school work! This extension helps you track your learning progress and reminds you to stay on task.",
   "permissions": [
     "tabs",
     "history",
     "storage",
-    "sidePanel"
+    "sidePanel",
+    "notifications"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -20,6 +21,6 @@
   },
   "options_page": "options.html",
   "action": {
-    "default_title": "Classroom Activity Tracker"
+    "default_title": "Classroom Activity Tracker - Stay Focused!"
   }
 } 

@@ -7,174 +7,277 @@ let currentStudentInfo = {
 };
 let activityData = [];
 
-// Load student information and initial data
-document.addEventListener('DOMContentLoaded', () => {
+// Store recent activities
+let recentActivities = [];
+let gameWarningShown = false;
+let studentInfoSet = false;
+
+// Initialize the side panel
+document.addEventListener('DOMContentLoaded', function() {
   loadStudentInfo();
-  loadActivityData();
+  loadRecentActivity();
+  setupEventListeners();
   
-  // Set up refresh button
-  document.getElementById('refreshBtn').addEventListener('click', loadActivityData);
-  
-  // Set up student info form
-  setupStudentForm();
+  // Listen for messages from background script
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'GAME_WARNING') {
+      showGameWarning(message.data.url);
+    } else if (message.type === 'ACTIVITY_UPDATED') {
+      addActivity(message.data);
+    }
+  });
 });
+
+// Set up event listeners
+function setupEventListeners() {
+  document.getElementById('saveBtn').addEventListener('click', saveStudentInfo);
+  document.getElementById('refreshBtn').addEventListener('click', loadRecentActivity);
+  document.getElementById('editInfoBtn').addEventListener('click', showEditForm);
+}
 
 // Load student information from storage
 function loadStudentInfo() {
-  chrome.storage.local.get(['studentId', 'studentName', 'className', 'chromebookNumber'], (result) => {
-    if (result.studentId) {
-      currentStudentInfo = {
-        studentId: result.studentId,
-        studentName: result.studentName,
-        className: result.className,
-        chromebookNumber: result.chromebookNumber
-      };
-      document.getElementById('deviceName').textContent = `${result.studentName} - ${result.className} - CB${result.chromebookNumber}`;
-      document.getElementById('studentForm').style.display = 'none';
-    } else {
-      document.getElementById('deviceName').textContent = 'Please set your information below';
-      document.getElementById('studentForm').style.display = 'block';
-    }
-  });
-}
-
-// Setup student form
-function setupStudentForm() {
-  const form = document.getElementById('infoForm');
-  const statusDiv = document.getElementById('formStatus');
-  
-  // Load existing data into form
-  chrome.storage.local.get(['studentName', 'className', 'chromebookNumber'], (result) => {
-    if (result.studentName) {
+  chrome.storage.local.get(['studentId', 'studentName', 'className', 'chromebookNumber'], function(result) {
+    if (result.studentName && result.className && result.chromebookNumber) {
+      // Student info is set - show greeting
       document.getElementById('studentName').value = result.studentName;
-    }
-    if (result.className) {
       document.getElementById('className').value = result.className;
-    }
-    if (result.chromebookNumber) {
       document.getElementById('chromebookNumber').value = result.chromebookNumber;
-    }
-  });
-  
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const studentName = document.getElementById('studentName').value.trim();
-    const className = document.getElementById('className').value.trim();
-    const chromebookNumber = document.getElementById('chromebookNumber').value.trim();
-    
-    if (!studentName || !className || !chromebookNumber) {
-      showFormStatus('Please fill in all fields.', 'error');
-      return;
-    }
-    
-    // Create a unique identifier
-    const studentId = `${studentName} - ${className} - CB${chromebookNumber}`;
-    
-    chrome.storage.local.set({ 
-      studentName,
-      className, 
-      chromebookNumber,
-      studentId
-    }, () => {
-      showFormStatus('Information saved successfully!', 'success');
       
-      // Update the display
-      setTimeout(() => {
-        loadStudentInfo();
-        document.getElementById('studentForm').style.display = 'none';
-      }, 1500);
-    });
+      // Update greeting
+      document.getElementById('greetingName').textContent = result.studentName;
+      document.getElementById('greetingClass').textContent = result.className;
+      document.getElementById('greetingDevice').textContent = `Chromebook #${result.chromebookNumber}`;
+      
+      // Show greeting, hide form
+      document.getElementById('studentGreeting').style.display = 'block';
+      document.getElementById('studentForm').style.display = 'none';
+      
+      // Set device name display
+      const deviceName = `Chromebook #${result.chromebookNumber}`;
+      document.getElementById('deviceName').textContent = deviceName;
+      
+      // Hide setup reminder
+      document.getElementById('setupReminder').style.display = 'none';
+      studentInfoSet = true;
+    } else {
+      // Student info not set - show form
+      document.getElementById('studentGreeting').style.display = 'none';
+      document.getElementById('studentForm').style.display = 'block';
+      document.getElementById('deviceName').textContent = 'Please set up your information below';
+      document.getElementById('setupReminder').style.display = 'block';
+      studentInfoSet = false;
+    }
   });
 }
 
-function showFormStatus(message, type) {
-  const statusDiv = document.getElementById('formStatus');
-  statusDiv.textContent = message;
-  statusDiv.className = `status ${type}`;
-  statusDiv.style.display = 'block';
-  
-  setTimeout(() => {
-    statusDiv.style.display = 'none';
-  }, 3000);
+// Show edit form
+function showEditForm() {
+  document.getElementById('studentGreeting').style.display = 'none';
+  document.getElementById('studentForm').style.display = 'block';
 }
 
-// Load activity data from backend
-async function loadActivityData() {
-  try {
-    const response = await fetch('https://backend-khaki-phi-30.vercel.app/api/history');
-    const data = await response.json();
+// Save student information
+function saveStudentInfo() {
+  const studentName = document.getElementById('studentName').value.trim();
+  const className = document.getElementById('className').value.trim();
+  const chromebookNumber = document.getElementById('chromebookNumber').value.trim();
+  
+  if (!studentName || !className || !chromebookNumber) {
+    showStatus('Please fill in all fields', 'error');
+    return;
+  }
+  
+  const studentId = `${studentName}-${className}-${chromebookNumber}`;
+  
+  chrome.storage.local.set({
+    studentId: studentId,
+    studentName: studentName,
+    className: className,
+    chromebookNumber: chromebookNumber
+  }, function() {
+    showStatus('Information saved successfully!', 'success');
     
-    // Filter data for current student
-    activityData = data.browsingData.filter(item => item.studentId === currentStudentInfo.studentId);
+    // Update greeting
+    document.getElementById('greetingName').textContent = studentName;
+    document.getElementById('greetingClass').textContent = className;
+    document.getElementById('greetingDevice').textContent = `Chromebook #${chromebookNumber}`;
     
-    updateStats();
-    updateRecentActivity();
-  } catch (error) {
-    console.log('Could not load activity data:', error.message);
-    // Show offline message
-    document.getElementById('recentActivity').innerHTML = `
-      <div style="text-align: center; color: #6c757d; padding: 20px;">
-        Backend not available. Check if server is running.
-      </div>
-    `;
+    // Show greeting, hide form
+    document.getElementById('studentGreeting').style.display = 'block';
+    document.getElementById('studentForm').style.display = 'none';
+    
+    document.getElementById('deviceName').textContent = `Chromebook #${chromebookNumber}`;
+    document.getElementById('setupReminder').style.display = 'none';
+    studentInfoSet = true;
+    
+    // Hide status after 3 seconds
+    setTimeout(() => {
+      document.getElementById('saveStatus').style.display = 'none';
+    }, 3000);
+  });
+}
+
+// Show status message
+function showStatus(message, type) {
+  const statusEl = document.getElementById('saveStatus');
+  statusEl.textContent = message;
+  statusEl.className = `status ${type}`;
+  statusEl.style.display = 'block';
+}
+
+// Load recent activity from storage
+function loadRecentActivity() {
+  chrome.storage.local.get(['recentActivities'], function(result) {
+    if (result.recentActivities) {
+      recentActivities = result.recentActivities;
+      updateActivityDisplay();
+      updateStats();
+    }
+  });
+}
+
+// Add new activity
+function addActivity(activity) {
+  // Only track activity if student info is set
+  if (!studentInfoSet) {
+    return;
+  }
+  
+  recentActivities.unshift(activity);
+  
+  // Keep only last 20 activities
+  if (recentActivities.length > 20) {
+    recentActivities = recentActivities.slice(0, 20);
+  }
+  
+  // Save to storage
+  chrome.storage.local.set({ recentActivities: recentActivities });
+  
+  // Update display
+  updateActivityDisplay();
+  updateStats();
+  
+  // Show game warning if needed
+  if (activity.isGameSite && !gameWarningShown) {
+    showGameWarning(activity.url);
   }
 }
 
-// Update statistics
-function updateStats() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  
-  // Filter today's activity
-  const todayActivity = activityData.filter(item => {
-    const itemDate = new Date(item.timestamp);
-    itemDate.setHours(0, 0, 0, 0);
-    return itemDate.getTime() === today.getTime();
-  });
-  
-  const gameSites = todayActivity.filter(item => item.isGameSite).length;
-  const regularSites = todayActivity.filter(item => !item.isGameSite).length;
-  const totalSites = todayActivity.length;
-  
-  document.getElementById('totalSites').textContent = totalSites;
-  document.getElementById('gameSites').textContent = gameSites;
-  document.getElementById('regularSites').textContent = regularSites;
+// Helper function to get hostname from URL
+function getHostname(url) {
+  try {
+    return new URL(url).hostname;
+  } catch (e) {
+    return url;
+  }
 }
 
-// Update recent activity list
-function updateRecentActivity() {
-  const recentActivityDiv = document.getElementById('recentActivity');
+// Helper function to truncate URL
+function truncateUrl(url, maxLength = 40) {
+  if (url.length <= maxLength) return url;
+  return url.substring(0, maxLength) + '...';
+}
+
+// Update activity display
+function updateActivityDisplay() {
+  const container = document.getElementById('recentActivity');
   
-  if (activityData.length === 0) {
-    recentActivityDiv.innerHTML = `
-      <div style="text-align: center; color: #6c757d; padding: 20px;">
-        No activity yet...
+  if (!studentInfoSet) {
+    container.innerHTML = `
+      <div class="activity-item">
+        <div class="activity-hostname">Set up your information first</div>
+        <div class="activity-time">Fill in your details above to start tracking</div>
       </div>
     `;
     return;
   }
   
-  // Get last 10 activities
-  const recentItems = activityData.slice(-10).reverse();
+  if (recentActivities.length === 0) {
+    container.innerHTML = `
+      <div class="activity-item">
+        <div class="activity-hostname">No activity yet</div>
+        <div class="activity-time">Get started by browsing!</div>
+      </div>
+    `;
+    return;
+  }
   
-  const activityHTML = recentItems.map(item => {
-    const time = new Date(item.timestamp).toLocaleTimeString();
-    const badgeClass = item.isGameSite ? 'badge-danger' : 'badge-success';
-    const badgeText = item.isGameSite ? 'Game' : 'Regular';
+  container.innerHTML = recentActivities.slice(0, 10).map(activity => {
+    const time = new Date(activity.timestamp).toLocaleTimeString();
+    const hostname = getHostname(activity.url);
+    const category = activity.isGameSite ? 'game' : 'educational';
+    const categoryText = activity.isGameSite ? 'Game Site' : 'Educational';
+    const truncatedUrl = truncateUrl(activity.url, 35);
     
     return `
       <div class="activity-item">
-        <div>
-          <a href="${item.url}" target="_blank" class="activity-url">${getDomainFromUrl(item.url)}</a>
-          <span class="badge ${badgeClass}">${badgeText}</span>
-        </div>
+        <div class="activity-hostname">${hostname}</div>
+        <div class="activity-category ${category}">${categoryText}</div>
+        <a href="${activity.url}" target="_blank" class="activity-link" title="${activity.url}">${truncatedUrl}</a>
         <div class="activity-time">${time}</div>
       </div>
     `;
   }).join('');
+}
+
+// Update statistics
+function updateStats() {
+  if (!studentInfoSet) {
+    document.getElementById('sitesVisited').textContent = '0';
+    document.getElementById('focusScore').textContent = '100%';
+    document.getElementById('statusBadge').textContent = 'Not Set Up';
+    document.getElementById('statusBadge').className = 'badge badge-warning';
+    return;
+  }
   
-  recentActivityDiv.innerHTML = activityHTML;
+  const totalSites = recentActivities.length;
+  const gameSites = recentActivities.filter(a => a.isGameSite).length;
+  const regularSites = totalSites - gameSites;
+  
+  // Calculate focus score (percentage of non-game sites)
+  const focusScore = totalSites > 0 ? Math.round(((totalSites - gameSites) / totalSites) * 100) : 100;
+  
+  document.getElementById('sitesVisited').textContent = totalSites;
+  document.getElementById('focusScore').textContent = `${focusScore}%`;
+  
+  // Update status badge
+  const statusBadge = document.getElementById('statusBadge');
+  if (focusScore >= 90) {
+    statusBadge.textContent = 'On Task';
+    statusBadge.className = 'badge badge-success';
+    showEncouragement();
+  } else if (focusScore >= 70) {
+    statusBadge.textContent = 'Needs Focus';
+    statusBadge.className = 'badge badge-warning';
+  } else {
+    statusBadge.textContent = 'Off Task';
+    statusBadge.className = 'badge badge-danger';
+  }
+}
+
+// Show game warning
+function showGameWarning(url) {
+  const warning = document.getElementById('gameWarning');
+  warning.style.display = 'block';
+  gameWarningShown = true;
+  
+  // Hide warning after 10 seconds
+  setTimeout(() => {
+    warning.style.display = 'none';
+    gameWarningShown = false;
+  }, 10000);
+}
+
+// Show encouragement message
+function showEncouragement() {
+  const encouragement = document.getElementById('encouragement');
+  encouragement.style.display = 'block';
+  
+  // Hide encouragement after 5 seconds
+  setTimeout(() => {
+    encouragement.style.display = 'none';
+  }, 5000);
 }
 
 // Helper function to get domain from URL

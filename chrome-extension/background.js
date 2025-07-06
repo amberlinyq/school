@@ -1,11 +1,28 @@
 // List of keywords/domains to detect game sites
 const GAME_KEYWORDS = [
-  'coolmathgames', 'poki', 'crazygames', 'games', 'miniclip', 'roblox', 'minecraft', 'fortnite', 'game', 'y8', 'addictinggames'
+  'coolmathgames', 'poki', 'crazygames', 'games', 'miniclip', 'roblox', 'minecraft', 'fortnite', 'game', 'y8', 'addictinggames',
+  'kongregate', 'armorgames', 'newgrounds', 'itch.io', 'steam', 'epicgames', 'battle.net', 'origin', 'uplay'
 ];
 
 // Helper to check if a URL is a game site
 function isGameSite(url) {
-  return GAME_KEYWORDS.some(keyword => url.includes(keyword));
+  return GAME_KEYWORDS.some(keyword => url.toLowerCase().includes(keyword));
+}
+
+// Show warning notification for game sites
+function showGameWarning(url) {
+  // Create notification
+  chrome.notifications.create({
+    type: 'basic',
+    title: '⚠️ Game Site Detected',
+    message: 'This site appears to be a game. Please stay focused on your school work!'
+  });
+
+  // Send message to side panel to show warning
+  chrome.runtime.sendMessage({ 
+    type: 'GAME_WARNING', 
+    data: { url: url, timestamp: Date.now() }
+  });
 }
 
 // Send browsing data to backend
@@ -46,9 +63,12 @@ function getStudentInfo(callback) {
   });
 }
 
+// Track tab updates
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
     getStudentInfo((studentInfo) => {
+      const isGame = isGameSite(tab.url);
+      
       const activity = {
         url: tab.url,
         timestamp: Date.now(),
@@ -56,14 +76,28 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         studentName: studentInfo.studentName,
         className: studentInfo.className,
         chromebookNumber: studentInfo.chromebookNumber,
-        isGameSite: isGameSite(tab.url)
+        isGameSite: isGame
       };
+      
       reportActivity(activity);
+      
+      // Show warning for game sites
+      if (isGame) {
+        showGameWarning(tab.url);
+      }
     });
   }
 });
 
 // Open side panel when extension icon is clicked
 chrome.action.onClicked.addListener((tab) => {
-  chrome.sidePanel.open({ tabId: tab.id });
+  chrome.sidePanel.open({tabId: tab.id});
+});
+
+// Handle messages from side panel
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'GET_STUDENT_INFO') {
+    getStudentInfo(sendResponse);
+    return true; // Keep message channel open for async response
+  }
 }); 

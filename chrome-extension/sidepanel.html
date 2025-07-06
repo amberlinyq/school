@@ -8,28 +8,35 @@
       margin: 0;
       padding: 16px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f8f9fa;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
     }
     
     .header {
       text-align: center;
       margin-bottom: 20px;
       padding-bottom: 16px;
-      border-bottom: 2px solid #e9ecef;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     }
     
     .header h1 {
       margin: 0;
-      color: #495057;
       font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .header p {
+      margin: 8px 0 0 0;
+      font-size: 12px;
+      opacity: 0.9;
     }
     
     .stats-card {
-      background: white;
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       padding: 16px;
       margin-bottom: 16px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
     }
     
     .stat-item {
@@ -45,12 +52,11 @@
     
     .stat-label {
       font-weight: 500;
-      color: #6c757d;
+      opacity: 0.9;
     }
     
     .stat-value {
       font-weight: 600;
-      color: #495057;
     }
     
     .badge {
@@ -61,12 +67,17 @@
     }
     
     .badge-danger {
-      background-color: #dc3545;
+      background-color: rgba(220, 53, 69, 0.8);
       color: white;
     }
     
     .badge-success {
-      background-color: #28a745;
+      background-color: rgba(40, 167, 69, 0.8);
+      color: white;
+    }
+    
+    .badge-warning {
+      background-color: rgba(255, 193, 7, 0.8);
       color: white;
     }
     
@@ -77,7 +88,7 @@
     
     .activity-item {
       padding: 8px 0;
-      border-bottom: 1px solid #e9ecef;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       font-size: 12px;
     }
     
@@ -86,47 +97,109 @@
     }
     
     .activity-url {
-      color: #007bff;
+      color: #fff;
       text-decoration: none;
       word-break: break-all;
+      opacity: 0.9;
     }
     
     .activity-time {
-      color: #6c757d;
+      opacity: 0.7;
       font-size: 11px;
     }
     
+    .activity-hostname {
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    
+    .activity-category {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .activity-category.game {
+      background: rgba(220, 53, 69, 0.8);
+      color: white;
+    }
+    
+    .activity-category.educational {
+      background: rgba(40, 167, 69, 0.8);
+      color: white;
+    }
+    
+    .activity-link {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 11px;
+      word-break: break-all;
+      display: block;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      position: relative;
+    }
+    
+    .activity-link:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+    
+    .activity-link:hover::after {
+      content: attr(title);
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      white-space: nowrap;
+      z-index: 1000;
+      max-width: 200px;
+      word-wrap: break-word;
+    }
+    
     .device-name {
-      background: #e9ecef;
+      background: rgba(255, 255, 255, 0.1);
       padding: 8px 12px;
       border-radius: 6px;
       text-align: center;
       margin-bottom: 16px;
       font-weight: 500;
+      backdrop-filter: blur(10px);
     }
     
     .refresh-btn {
       width: 100%;
       padding: 8px;
-      background: #007bff;
+      background: rgba(255, 255, 255, 0.2);
       color: white;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 4px;
       cursor: pointer;
       margin-bottom: 16px;
+      transition: all 0.3s ease;
     }
     
     .refresh-btn:hover {
-      background: #0056b3;
+      background: rgba(255, 255, 255, 0.3);
     }
     
     /* Student Info Form Styles */
     .student-form {
-      background: white;
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       padding: 16px;
       margin-bottom: 16px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
     }
     
     .form-group {
@@ -137,39 +210,46 @@
       display: block;
       margin-bottom: 4px;
       font-weight: 500;
-      color: #333;
       font-size: 12px;
+      opacity: 0.9;
     }
     
     .form-group input {
       width: 100%;
       padding: 6px 8px;
-      border: 1px solid #ddd;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 4px;
       font-size: 12px;
       box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
     }
     
     .form-group input:focus {
       outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
     }
     
     .save-btn {
       width: 100%;
       padding: 8px;
-      background: #28a745;
+      background: rgba(40, 167, 69, 0.8);
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       font-size: 12px;
       margin-top: 8px;
+      transition: all 0.3s ease;
     }
     
     .save-btn:hover {
-      background: #218838;
+      background: rgba(40, 167, 69, 1);
     }
     
     .status {
@@ -182,74 +262,169 @@
     }
     
     .status.success {
-      background: #d4edda;
-      color: #155724;
+      background: rgba(40, 167, 69, 0.2);
+      color: #fff;
     }
     
     .status.error {
-      background: #f8d7da;
-      color: #721c24;
+      background: rgba(220, 53, 69, 0.2);
+      color: #fff;
+    }
+    
+    /* Game Warning Styles */
+    .game-warning {
+      background: rgba(220, 53, 69, 0.2);
+      border: 1px solid rgba(220, 53, 69, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    
+    .warning-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    
+    .warning-text {
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .encouragement {
+      background: rgba(40, 167, 69, 0.2);
+      border: 1px solid rgba(40, 167, 69, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .encouragement-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    
+    .encouragement-text {
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .setup-reminder {
+      background: rgba(255, 193, 7, 0.2);
+      border: 1px solid rgba(255, 193, 7, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .setup-reminder-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    
+    .setup-reminder-text {
+      font-size: 12px;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>Activity Tracker</h1>
+    <h1>My Learning Tracker</h1>
+    <p>Stay focused and track your progress!</p>
   </div>
   
   <div class="device-name" id="deviceName">Loading...</div>
   
-  <!-- Student Information Form -->
-  <div class="student-form" id="studentForm" style="display: none;">
-    <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #333;">Set Your Information</h3>
-    <form id="infoForm">
-      <div class="form-group">
-        <label for="studentName">Full Name:</label>
-        <input type="text" id="studentName" placeholder="Enter your name" required />
-      </div>
-      
-      <div class="form-group">
-        <label for="className">Class:</label>
-        <input type="text" id="className" placeholder="e.g., Math 101" required />
-      </div>
-      
-      <div class="form-group">
-        <label for="chromebookNumber">Chromebook #:</label>
-        <input type="text" id="chromebookNumber" placeholder="e.g., 15, CB-001" required />
-      </div>
-      
-      <button type="submit" class="save-btn">Save Information</button>
-    </form>
-    <div id="formStatus" class="status" style="display: none;"></div>
+  <!-- Setup Reminder (shown when info not set) -->
+  <div class="setup-reminder" id="setupReminder" style="display: none;">
+    <div class="setup-reminder-icon">Settings</div>
+    <div class="setup-reminder-text">Please set up your information to get started!</div>
   </div>
   
-  <button class="refresh-btn" id="refreshBtn">Refresh Data</button>
+  <!-- Game Warning -->
+  <div class="game-warning" id="gameWarning" style="display: none;">
+    <div class="warning-icon">Warning</div>
+    <div class="warning-text">Game site detected! Please stay focused on your school work.</div>
+  </div>
   
-  <div class="stats-card">
-    <h3>Today's Stats</h3>
-    <div class="stat-item">
-      <span class="stat-label">Sites Visited:</span>
-      <span class="stat-value" id="totalSites">0</span>
+  <!-- Encouragement Message -->
+  <div class="encouragement" id="encouragement" style="display: none;">
+    <div class="encouragement-icon">Great Job!</div>
+    <div class="encouragement-text">Great job staying focused on your studies!</div>
+  </div>
+  
+  <!-- Student Information Form (Always Visible) -->
+  <div class="student-form">
+    <h3 style="margin: 0 0 12px 0; font-size: 14px;">My Information</h3>
+    
+    <!-- Greeting (shown when info is saved) -->
+    <div id="studentGreeting" style="display: none;">
+      <div style="text-align: center; padding: 16px;">
+        <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Hi, <span id="greetingName">Student</span>!</div>
+        <div style="font-size: 12px; opacity: 0.8; margin-bottom: 12px;">
+          Class: <span id="greetingClass">Class</span> | Device: <span id="greetingDevice">Device</span>
+        </div>
+        <button class="edit-btn" id="editInfoBtn" style="background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px;">Edit Info</button>
+      </div>
     </div>
-    <div class="stat-item">
-      <span class="stat-label">Game Sites:</span>
-      <span class="stat-value" id="gameSites">0</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-label">Regular Sites:</span>
-      <span class="stat-value" id="regularSites">0</span>
+    
+    <!-- Form (shown when info not set or editing) -->
+    <div id="studentForm">
+      <div class="form-group">
+        <label for="studentName">My Name:</label>
+        <input type="text" id="studentName" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label for="className">My Class:</label>
+        <input type="text" id="className" placeholder="Enter your class">
+      </div>
+      <div class="form-group">
+        <label for="chromebookNumber">Chromebook Number:</label>
+        <input type="text" id="chromebookNumber" placeholder="Enter chromebook number">
+      </div>
+      <button class="save-btn" id="saveBtn">Save My Info</button>
+      <div class="status" id="saveStatus" style="display: none;"></div>
     </div>
   </div>
   
   <div class="stats-card">
-    <h3>Recent Activity</h3>
+    <h3 style="margin: 0 0 12px 0; font-size: 14px;">My Activity Summary</h3>
+    <div class="stat-item">
+      <span class="stat-label">Sites Visited Today:</span>
+      <span class="stat-value" id="sitesVisited">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Focus Score:</span>
+      <span class="stat-value" id="focusScore">100%</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Status:</span>
+      <span class="badge badge-success" id="statusBadge">On Task</span>
+    </div>
+  </div>
+  
+  <div class="stats-card">
+    <h3 style="margin: 0 0 12px 0; font-size: 14px;">Recent Activity</h3>
     <div class="recent-activity" id="recentActivity">
-      <div style="text-align: center; color: #6c757d; padding: 20px;">
-        No activity yet...
+      <div class="activity-item">
+        <div class="activity-url">No activity yet</div>
+        <div class="activity-time">Get started by browsing!</div>
       </div>
     </div>
   </div>
   
+  <button class="refresh-btn" id="refreshBtn">Refresh Activity</button>
+
   <script src="sidepanel.js"></script>
 </body>
 </html> 

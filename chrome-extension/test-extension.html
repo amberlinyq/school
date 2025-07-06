@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Chrome Extension</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+    }
+    
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .test-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+    
+    .test-section h3 {
+      margin-top: 0;
+      color: #fff;
+    }
+    
+    .btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-danger {
+      background: rgba(220, 53, 69, 0.8);
+      border-color: rgba(220, 53, 69, 0.3);
+    }
+    
+    .btn-danger:hover {
+      background: rgba(220, 53, 69, 1);
+    }
+    
+    .btn-success {
+      background: rgba(40, 167, 69, 0.8);
+      border-color: rgba(40, 167, 69, 0.3);
+    }
+    
+    .btn-success:hover {
+      background: rgba(40, 167, 69, 1);
+    }
+    
+    .status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Chrome Extension Test Page</h1>
+    
+    <div class="test-section">
+      <h3>📚 Educational Sites (Should NOT trigger warnings)</h3>
+      <button class="btn btn-success" onclick="window.open('https://www.khanacademy.org', '_blank')">
+        Khan Academy
+      </button>
+      <button class="btn btn-success" onclick="window.open('https://www.edx.org', '_blank')">
+        edX
+      </button>
+      <button class="btn btn-success" onclick="window.open('https://www.coursera.org', '_blank')">
+        Coursera
+      </button>
+      <button class="btn btn-success" onclick="window.open('https://www.wikipedia.org', '_blank')">
+        Wikipedia
+      </button>
+      <button class="btn btn-success" onclick="window.open('https://www.mathway.com', '_blank')">
+        Mathway
+      </button>
+    </div>
+    
+    <div class="test-section">
+      <h3>🎮 Game Sites (Should trigger warnings)</h3>
+      <button class="btn btn-danger" onclick="window.open('https://www.coolmathgames.com', '_blank')">
+        Cool Math Games
+      </button>
+      <button class="btn btn-danger" onclick="window.open('https://www.poki.com', '_blank')">
+        Poki Games
+      </button>
+      <button class="btn btn-danger" onclick="window.open('https://www.crazygames.com', '_blank')">
+        Crazy Games
+      </button>
+      <button class="btn btn-danger" onclick="window.open('https://www.roblox.com', '_blank')">
+        Roblox
+      </button>
+      <button class="btn btn-danger" onclick="window.open('https://www.minecraft.net', '_blank')">
+        Minecraft
+      </button>
+    </div>
+    
+    <div class="test-section">
+      <h3>🔧 Extension Features</h3>
+      <button class="btn" onclick="testNotification()">
+        Test Notification
+      </button>
+      <button class="btn" onclick="testStorage()">
+        Test Storage
+      </button>
+      <button class="btn" onclick="clearStorage()">
+        Clear Storage
+      </button>
+    </div>
+    
+    <div class="status" id="status">
+      Ready to test! Make sure the Chrome extension is installed and enabled.
+    </div>
+  </div>
+
+  <script>
+    function testNotification() {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(function(permission) {
+          if (permission === 'granted') {
+            new Notification('Test Notification', {
+              body: 'This is a test notification from the extension!',
+              icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjNjY3ZWVhIi8+CjxwYXRoIGQ9Ik0yNCA0QzEyLjk1IDQgNCAxMi45NSA0IDI0QzQgMzUuMDUgMTIuOTUgNDQgMjQgNDRDMzUuMDUgNDQgNDQgMzUuMDUgNDQgMjRDNDQgMTIuOTUgMzUuMDUgNCAyNCA0WiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjI0IiBjeT0iMjQiIHI9IjQiIGZpbGw9IiM2NjdlZWEiLz4KPC9zdmc+'
+            });
+            updateStatus('Notification sent! Check your browser notifications.');
+          } else {
+            updateStatus('Notification permission denied.');
+          }
+        });
+      } else {
+        updateStatus('Notifications not supported in this browser.');
+      }
+    }
+    
+    function testStorage() {
+      const testData = {
+        studentName: 'Test Student',
+        className: 'Test Class',
+        chromebookNumber: 'TEST-001',
+        recentActivities: [
+          {
+            url: 'https://www.khanacademy.org',
+            timestamp: Date.now(),
+            isGameSite: false
+          }
+        ]
+      };
+      
+      if (typeof chrome !== 'undefined' && chrome.storage) {
+        chrome.storage.local.set(testData, function() {
+          updateStatus('Test data saved to storage!');
+        });
+      } else {
+        updateStatus('Chrome storage API not available.');
+      }
+    }
+    
+    function clearStorage() {
+      if (typeof chrome !== 'undefined' && chrome.storage) {
+        chrome.storage.local.clear(function() {
+          updateStatus('Storage cleared!');
+        });
+      } else {
+        updateStatus('Chrome storage API not available.');
+      }
+    }
+    
+    function updateStatus(message) {
+      document.getElementById('status').textContent = message;
+    }
+    
+    // Check if extension is installed
+    if (typeof chrome !== 'undefined' && chrome.runtime) {
+      updateStatus('Chrome extension API detected! Extension should be working.');
+    } else {
+      updateStatus('Chrome extension API not detected. Make sure the extension is installed.');
+    }
+  </script>
+</body>
+</html> 
