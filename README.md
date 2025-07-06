@@ -7,7 +7,7 @@ A comprehensive full-stack application that helps teachers monitor student activ
 **Teacher Dashboard:** [https://teacher-dashboard-amberlin.vercel.app](https://teacher-dashboard-amberlin.vercel.app)  
 **Backend API:** [https://backend-khaki-phi-30.vercel.app](https://backend-khaki-phi-30.vercel.app)
 
-## 📋 Quick Start for Hiring Managers
+## 📋 Quick Start
 
 ### 🎯 Test the Application
 
