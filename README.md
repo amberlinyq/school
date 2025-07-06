@@ -1,192 +1,179 @@
-# Student Browser Monitoring Chrome Extension
+# 🏫 Classroom Activity Tracker
 
-A Chrome extension that helps teachers monitor students' browsing activity on Chromebooks, with a focus on detecting visits to game sites and tracking browser history.
+A comprehensive full-stack application that helps teachers monitor student activity and engagement in real-time. Built with React, Node.js, and Chrome Extension technology.
 
-## 🎯 What This Does
+## 🚀 Live Demo
 
-- **For Students**: Automatically tracks browsing activity and reports it to the teacher
-- **For Teachers**: Provides a dashboard to monitor all students' browsing history and get alerts when students visit game sites
-- **Privacy**: Only tracks browsing data, no personal information is collected
+**Teacher Dashboard:** [https://teacher-dashboard-amberlin.vercel.app](https://teacher-dashboard-amberlin.vercel.app)  
+**Backend API:** [https://backend-khaki-phi-30.vercel.app](https://backend-khaki-phi-30.vercel.app)
 
-## 📁 Project Structure
+## 📋 Quick Start for Hiring Managers
 
-```
-school/
-├── chrome-extension/          # Chrome extension files
-│   ├── manifest.json         # Extension configuration
-│   ├── background.js         # Tracks browsing activity
-│   ├── side-panel.html      # Student info input form
-│   ├── side-panel.js        # Handles student form
-│   └── icons/               # Extension icons
-├── backend/                  # Node.js server
-│   ├── server.js            # Express server
-│   ├── package.json         # Dependencies
-│   └── .env                # Environment variables
-└── dashboard/               # React teacher dashboard
-    ├── src/
-    ├── package.json
-    └── public/
-```
+### 🎯 Test the Application
 
-## 🚀 Quick Start
+1. **Open the Teacher Dashboard:** Click the live demo link above
+2. **Login:** Use password `teacher123`
+3. **Explore Features:**
+   - View student overview with red/green flags
+   - Click student cards to see detailed activity
+   - Export individual student data to CSV
+   - Monitor real-time alerts and activity
 
-### 1. Set Up the Backend
+### 🔧 Technical Stack
 
-```bash
-cd backend
-npm install
-npm start
-```
+- **Frontend:** React.js, CSS3, Modern JavaScript (ES6+)
+- **Backend:** Node.js, Express.js, RESTful APIs
+- **Extension:** Chrome Extension API, Manifest V3
+- **Deployment:** Vercel (Frontend & Backend)
+- **Version Control:** Git, GitHub
 
-The backend will run on `http://localhost:3001`
+## 🎯 Project Overview
 
-### 2. Set Up the Dashboard
+This application consists of three main components:
 
-```bash
-cd dashboard
-npm install
-npm start
-```
+### 1. **Teacher Dashboard** (`/teacher-dashboard`)
+A modern, responsive web application that provides teachers with real-time insights into student activity.
 
-The dashboard will run on `http://localhost:3000`
+**Key Features:**
+- 📊 **Overview Dashboard** - Quick statistics and student cards
+- 🚨 **Smart Alerts** - Game site detection with immediate notifications
+- 👥 **Student Management** - Individual student tracking with activity history
+- 📈 **Activity Monitoring** - Comprehensive activity logs with filtering
+- 📊 **Data Export** - CSV export for administrative reporting
+- 🎨 **Modern UI** - Responsive design with intuitive navigation
 
-### 3. Install the Chrome Extension
+### 2. **Chrome Extension** (`/chrome-extension`)
+A browser extension that monitors student browsing activity and sends data to the backend.
 
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable "Developer mode" (toggle in top right)
-3. Click "Load unpacked"
-4. Select the `chrome-extension` folder
-5. The extension will appear in your extensions list
+**Features:**
+- Real-time browsing activity tracking
+- Game site detection and flagging
+- Automatic data transmission to backend
+- Privacy-compliant monitoring
 
-### 4. Configure Student Information
+### 3. **Backend API** (`/backend`)
+A RESTful API that processes and stores student activity data.
 
-1. Click the extension icon in Chrome
-2. Click "Open side panel"
-3. Enter your:
-   - Name
-   - Class
-   - Chromebook number
-4. Click "Save"
+**Endpoints:**
+- `POST /api/activity` - Receive student activity data
+- `GET /api/history` - Retrieve browsing history and alerts
+- `GET /api/students` - Get list of active students
+- `GET /api/student/:id` - Get specific student data
 
-## 📊 How It Works
+## 🛠️ Development Setup
 
-### For Students
-1. **Install Extension**: Students install the Chrome extension
-2. **Enter Info**: Students input their name, class, and Chromebook number
-3. **Automatic Tracking**: The extension automatically tracks all website visits
-4. **Game Detection**: Automatically detects visits to popular game sites
-5. **Data Reporting**: Sends browsing data to the teacher's dashboard
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+- Chrome browser (for extension testing)
 
-### For Teachers
-1. **Dashboard Access**: Teachers access the React dashboard
-2. **Real-time Monitoring**: See all students' browsing activity in real-time
-3. **Game Alerts**: Get notifications when students visit game sites
-4. **History View**: Browse through detailed browsing history for each student
+### Installation
 
-## 🔧 Configuration
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/amberlinyq/school.git
+   cd school
+   ```
 
-### Backend Environment Variables
-Create a `.env` file in the `backend` folder:
-```
-PORT=3001
-```
+2. **Install dependencies**
+   ```bash
+   # Teacher Dashboard
+   cd teacher-dashboard
+   npm install
+   
+   # Backend
+   cd ../backend
+   npm install
+   ```
 
-### Dashboard Configuration
-Update the API URL in `dashboard/src/services/api.js` if needed.
+3. **Run the applications**
+   ```bash
+   # Teacher Dashboard (Port 3000)
+   cd teacher-dashboard
+   npm start
+   
+   # Backend (Port 3001)
+   cd ../backend
+   npm start
+   ```
 
-## 🎮 Game Site Detection
+4. **Load Chrome Extension**
+   - Open Chrome and go to `chrome://extensions/`
+   - Enable "Developer mode"
+   - Click "Load unpacked" and select the `chrome-extension` folder
 
-The extension automatically detects visits to popular game sites including:
-- Roblox
-- Minecraft
-- Fortnite
-- Cool Math Games
-- And many more...
+## 🎨 User Experience Highlights
 
-## 📱 Features
+### Teacher Dashboard Features
+- **Student Cards** with avatars and activity indicators
+- **Red Flags** for students who visited game sites
+- **Green Indicators** for students staying focused
+- **Clickable Cards** that open detailed activity modals
+- **CSV Export** for individual student data
+- **Real-time Updates** every 30 seconds
+- **Search & Filter** functionality across all data
+- **Mobile Responsive** design for tablet use
 
-### Chrome Extension
-- ✅ Automatic browsing tracking
-- ✅ Game site detection
-- ✅ Student information input
-- ✅ Real-time data reporting
-- ✅ Side panel interface
+### Technical Achievements
+- **Modern React Patterns** with hooks and functional components
+- **Responsive Design** that works on all devices
+- **Error Handling** with user-friendly messages
+- **Loading States** and smooth animations
+- **Accessibility Features** with proper focus management
+- **Performance Optimization** with efficient data fetching
 
-### Teacher Dashboard
-- ✅ Real-time student monitoring
-- ✅ Game site alerts
-- ✅ Detailed browsing history
-- ✅ Student activity timeline
-- ✅ Responsive design
+## 📊 Demo Data
 
-### Backend API
-- ✅ Store browsing data
-- ✅ Student management
-- ✅ Game detection alerts
-- ✅ RESTful API endpoints
+The application includes demo data to showcase functionality:
+- Sample student activities and browsing history
+- Game site alerts and regular site visits
+- Multiple student profiles with different activity levels
+
+## 🔒 Security Notes
+
+⚠️ **Demo Version:** This is a demonstration project with simplified authentication. For production use, implement:
+- Proper authentication (OAuth, SSO)
+- Environment variables for sensitive data
+- Rate limiting and request validation
+- HTTPS enforcement
+- Audit logging
 
 ## 🚀 Deployment
 
-### Deploy Backend to Vercel
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Deploy the `backend` folder
-4. Update the API URL in the extension and dashboard
+### Frontend (Teacher Dashboard)
+- **Platform:** Vercel
+- **URL:** https://teacher-dashboard-amberlin.vercel.app
+- **Build Command:** `npm run build`
+- **Output Directory:** `build`
 
-### Deploy Dashboard to Vercel
-1. Deploy the `dashboard` folder to Vercel
-2. Update the API URL to point to your deployed backend
+### Backend API
+- **Platform:** Vercel
+- **URL:** https://backend-khaki-phi-30.vercel.app
+- **Runtime:** Node.js
+- **Framework:** Express.js
 
-## 📦 Distribution
+## 🎯 Future Enhancements
 
-### For Small Groups (Manual Installation)
-1. Zip the `chrome-extension` folder
-2. Share the ZIP file with students
-3. Students extract and load via Chrome's developer mode
+- [ ] Real-time WebSocket updates
+- [ ] Advanced analytics and reporting
+- [ ] Multi-classroom support
+- [ ] Parent portal integration
+- [ ] Automated attendance tracking
+- [ ] Performance analytics dashboard
+- [ ] Custom alert thresholds
+- [ ] Data visualization charts
 
-### For Larger Groups
-Consider publishing to the Chrome Web Store for easier distribution.
+## 📞 Contact & Support
 
-## 🔒 Privacy & Security
+**Developer:** Amber Lin  
+**GitHub:** [github.com/amberlinyq](https://github.com/amberlinyq)  
+**Project Repository:** [github.com/amberlinyq/school](https://github.com/amberlinyq/school)
 
-- **No Personal Data**: Only browsing URLs are tracked, no personal information
-- **Local Storage**: Student information is stored locally on the device
-- **Secure API**: Backend uses HTTPS for data transmission
-- **Teacher Access**: Only teachers with dashboard access can view data
-
-## 🛠️ Troubleshooting
-
-### Extension Not Working
-- Check that the backend is running
-- Verify the API URL in the extension
-- Check Chrome's developer console for errors
-
-### Dashboard Not Loading
-- Ensure the backend is deployed and accessible
-- Check the API URL in the dashboard configuration
-- Verify CORS settings on the backend
-
-### Data Not Appearing
-- Check that students have entered their information
-- Verify the extension is properly installed
-- Check the backend logs for errors
-
-## 📞 Support
-
-If you encounter issues:
-1. Check the browser console for error messages
-2. Verify all services are running
-3. Check the network tab for API calls
-4. Ensure all URLs are correctly configured
-
-## 🔄 Updates
-
-When updating the extension:
-1. Update the extension code
-2. Redeploy the backend and dashboard
-3. Update the API URLs in the extension
-4. Distribute the updated extension to students
+For technical questions or feature requests, please open an issue on GitHub.
 
 ---
 
-**Note**: This extension is designed for educational use in controlled environments. Always ensure compliance with your school's privacy policies and obtain necessary permissions before deployment. 
+**Version:** 2.0.0  
+**Last Updated:** December 2024  
+**License:** MIT  
+**Status:** Live Demo Available 
