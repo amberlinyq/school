@@ -170,10 +170,3 @@ The application includes demo data to showcase functionality:
 **Project Repository:** [github.com/amberlinyq/school](https://github.com/amberlinyq/school)
 
 For technical questions or feature requests, please open an issue on GitHub.
-
----
-
-**Version:** 2.0.0  
-**Last Updated:** December 2024  
-**License:** MIT  
-**Status:** Live Demo Available 
